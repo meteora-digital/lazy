@@ -1,12 +1,12 @@
 import { attach, nodeArray, offset, loopObject, Event } from '@meteora-digital/helpers';
 
 export default class Lazy {
-  constructor(selector = '[data-src]', threshold = 1) {
+  constructor(selector = '[data-src]', offset = 1) {
     this.selector = selector;
     this.images = {};
     this.cache = [];
     this.event = new Event('resize');
-    this.threshold = threshold;
+    this.offset = offset;
     this.view = {
       top: window.pageYOffset,
       bottom: window.pageYOffset + window.innerHeight,
@@ -37,8 +37,8 @@ export default class Lazy {
 
   observe() {
     this.view = {
-      top: window.pageYOffset + (window.innerHeight - (window.innerHeight * this.threshold)),
-      bottom: window.pageYOffset + window.innerHeight - (window.innerHeight - (window.innerHeight * this.threshold))
+      top: window.pageYOffset + (window.innerHeight - (window.innerHeight * this.offset)),
+      bottom: window.pageYOffset + window.innerHeight - (window.innerHeight - (window.innerHeight * this.offset))
     }
 
     loopObject(this.images, (index, item) => {

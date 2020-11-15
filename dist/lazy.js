@@ -11,7 +11,7 @@ var Lazy = /*#__PURE__*/function () {
     var _this = this;
 
     var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '[data-src]';
-    var threshold = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : .9;
+    var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
     _classCallCheck(this, Lazy);
 
@@ -19,7 +19,7 @@ var Lazy = /*#__PURE__*/function () {
     this.images = {};
     this.cache = [];
     this.event = new Event('resize');
-    this.threshold = threshold;
+    this.offset = offset;
     this.view = {
       top: window.pageYOffset,
       bottom: window.pageYOffset + window.innerHeight
@@ -57,8 +57,8 @@ var Lazy = /*#__PURE__*/function () {
       var _this2 = this;
 
       this.view = {
-        top: window.pageYOffset + (window.innerHeight - window.innerHeight * this.threshold),
-        bottom: window.pageYOffset + window.innerHeight - (window.innerHeight - window.innerHeight * this.threshold)
+        top: window.pageYOffset + (window.innerHeight - window.innerHeight * this.offset),
+        bottom: window.pageYOffset + window.innerHeight - (window.innerHeight - window.innerHeight * this.offset)
       };
       loopObject(this.images, function (index, item) {
         item.loaded === false ? _this2.render(item) : _this2.detach(index);
