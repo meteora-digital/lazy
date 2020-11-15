@@ -29,10 +29,13 @@ export default class Lazy {
     this.images[index] = {
       element: element,
       src: element.getAttribute('data-src'),
-      top: offset(element).y,
-      bottom: offset(element).y + element.clientHeight,
+      top: 0,
+      bottom: 0,
       loaded: false,
     }
+
+    this.images[index].top = offset(element).y;
+    this.images[index].bottom = this.images[index].top + element.clientHeight;
   }
 
   observe() {
