@@ -19,7 +19,7 @@ exports.default = function(done) {
       ]
     }))
     // Concatinate the files into one js file.
-    .pipe(concat('index.js'))
+    .pipe(concat('lazy.js'))
     // Save the file in the dist folder.
     .pipe(dest('./dist/'))
 };

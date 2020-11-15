@@ -1,0 +1,35 @@
+{
+  "name": "@meteora-digital/lazy",
+  "version": "1.0.0",
+  "description": "es6 class to lazy load images",
+  "author": "Emmanuel Davies",
+  "license": "MIT",
+  "main": "dist/lazy.js",
+  "scripts": {
+    "test": "echo 'lazy'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meteora-digital/lazy.git"
+  },
+  "keywords": [
+    "lazy",
+    "load",
+    "images"
+  ],
+  "bugs": {
+    "url": "https://github.com/meteora-digital/lazy/issues"
+  },
+  "homepage": "https://github.com/meteora-digital/lazy#readme",
+  "dependencies": {
+    "@meteora-digital/helpers": "latest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.11.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-plumber": "^1.2.1"
+  }
+}

@@ -1,27 +1,18 @@
-# Pacman Skeleton
+# Lazy Load
 
-- These are very basic instruction on how to set up your new package with npm.
-- For more detailed instructions view [How to publish npm packages](https://zellwk.com/blog/publish-to-npm/)
+```sh 
 
-Initialise the package with npm.
+yarn add @meteora-digital/lazy
 
-```sh
-$ npm login
-$ cd package/directory
-$ npm init
-$ npm publish
 ```
 
-Create a [git repo](https://github.com/new) for your package
+```javascript
 
-Install [np](https://www.npmjs.com/package/np) to help publish your packages
+import Lazy from '@meteora-digital/lazy';
 
-```sh
-$ sudo npm install --global np
+window.Lazy = new Lazy(selector, offset);
+
 ```
 
-Once updates are made and pushed to the git repo, you can publish the package to npm using 
-
-```sh
-$ np
-```
+- selector is a string, default value is '[data-src]'
+- offset is a percentage off the top of the window, default is 1 which targets the bottom of the scrolled window. 0.5 would be the middle, 0 would be the top.
