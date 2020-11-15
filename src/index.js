@@ -1,0 +1,1 @@
+console.log('require() your selected helper from the dist folder.');
