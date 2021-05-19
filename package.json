@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/meteora-digital/lazy#readme",
   "dependencies": {
-    "@meteora-digital/helpers": "^1.4.0"
+    "meteora": "0.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

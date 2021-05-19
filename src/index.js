@@ -1,4 +1,4 @@
-import { attach, nodeArray, offset, loopObject, Event } from '@meteora-digital/helpers';
+import { attach, nodeArray, offset, loopObject, Event } from 'meteora';
 
 export default class Lazy {
   constructor(selector = '[data-src]', offset = 1) {

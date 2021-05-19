@@ -4,7 +4,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-import { attach, nodeArray, offset, loopObject, Event } from '@meteora-digital/helpers';
+import { attach, nodeArray, offset, loopObject, Event } from 'meteora';
 
 var Lazy = /*#__PURE__*/function () {
   function Lazy() {
