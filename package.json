@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "dist/lazy.js",
   "scripts": {
-    "test": "echo 'lazy'"
+    "test": "npm i && gulp"
   },
   "repository": {
     "type": "git",
@@ -21,9 +21,6 @@
     "url": "https://github.com/meteora-digital/lazy/issues"
   },
   "homepage": "https://github.com/meteora-digital/lazy#readme",
-  "dependencies": {
-    "meteora": "0.0.5"
-  },
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.11.0",

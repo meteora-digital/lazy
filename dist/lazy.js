@@ -4,118 +4,99 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-import { attach, nodeArray, offset, loopObject, Event } from 'meteora';
-
-var Lazy = /*#__PURE__*/function () {
-  function Lazy() {
+var LazyLoad = /*#__PURE__*/function () {
+  function LazyLoad() {
     var _this = this;
 
-    var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '[data-src]';
-    var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    _classCallCheck(this, Lazy);
+    _classCallCheck(this, LazyLoad);
 
-    this.selector = selector;
-    this.images = {};
-    this.cache = [];
-    this.event = new Event('resize');
-    this.offset = offset;
-    this.view = {
-      top: window.pageYOffset,
-      bottom: window.pageYOffset + window.innerHeight
-    };
-    setTimeout(function () {
-      nodeArray(document.querySelectorAll(_this.selector)).forEach(function (element, index) {
-        return _this.load(element, index);
+    // The selector we will use to find lazy elements
+    this.selectors = []; // The images that have already been loaded
+
+    this.loaded = []; // The default settings
+
+    this.settings = {
+      offset: 500
+    }; // Assign the user options to the settings
+
+    for (var key in this.settings) {
+      if (Object.hasOwnProperty.call(this.settings, key) && Object.hasOwnProperty.call(options, key)) {
+        this.settings[key] = options[key];
+      }
+    } // Set up a new intersection observer
+
+
+    this.intersectionObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          // Tell the page to load this image
+          _this.load(entry.target); // Stop observing the element
+
+
+          _this.intersectionObserver.unobserve(entry.target); // Add the element to the loaded array
+
+
+          _this.loaded.push(entry.target);
+        }
+      }, {
+        threshold: 1,
+        rootMargin: "0 0 ".concat(_this.settings.offset, "px 0")
       });
-      attach(window, 'scroll', function () {
-        return _this.observe();
-      }, 250);
-      attach(window, 'resize', function () {
-        _this.observe();
-
-        _this.resize();
-      }, 250);
-    }, 500);
+    });
   }
 
-  _createClass(Lazy, [{
-    key: "load",
-    value: function load(element, index) {
-      this.cache.push(element);
-      this.images[index] = {
-        element: element,
-        src: element.getAttribute('data-src'),
-        top: 0,
-        bottom: 0,
-        loaded: false
-      };
-      this.images[index].top = offset(element).y;
-      this.images[index].bottom = this.images[index].top + element.clientHeight;
-    }
-  }, {
-    key: "observe",
-    value: function observe() {
-      var _this2 = this;
+  _createClass(LazyLoad, [{
+    key: "watch",
+    value: function watch() {
+      var selector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
-      this.view = {
-        top: window.pageYOffset + (window.innerHeight - window.innerHeight * this.offset),
-        bottom: window.pageYOffset + window.innerHeight - (window.innerHeight - window.innerHeight * this.offset)
-      };
-      loopObject(this.images, function (index, item) {
-        item.loaded === false ? _this2.render(item) : _this2.detach(index);
-      });
-    }
-  }, {
-    key: "resize",
-    value: function resize() {
-      loopObject(this.images, function (index, item) {
-        item.top = offset(item.element).y;
-        item.bottom = item.top + item.element.clientHeight;
-      });
-    }
-  }, {
-    key: "render",
-    value: function render(item) {
-      var _this3 = this;
-
-      if (item) {
-        if (this.view.bottom >= item.top && this.view.top <= item.bottom) {
-          var loader = document.createElement('img');
-          loader.src = item.src;
-          loader.addEventListener('load', function () {
-            item.loaded = true;
-
-            if (item.element.tagName === 'IMG') {
-              item.element.parentElement.classList.add('js-loaded');
-              item.element.src = item.src;
-              window.dispatchEvent(_this3.event);
-            } else {
-              item.element.classList.add('js-loaded');
-              item.element.style.backgroundImage = "url('".concat(item.src, "')");
-            }
-          });
+      // if the argument is a string, use it as a selector
+      if (typeof selector === 'string') {
+        // Update the selectors
+        if (this.selectors.indexOf(selector) === -1) {
+          this.selectors.push(selector);
+          this.update();
         }
+
+        ;
       }
-    }
-  }, {
-    key: "detach",
-    value: function detach(index) {
-      if (index && this.images[index]) delete this.images[index];
     }
   }, {
     key: "update",
     value: function update() {
-      var _this4 = this;
+      var _this2 = this;
 
-      nodeArray(document.querySelectorAll(this.selector)).forEach(function (item, index) {
-        if (!_this4.cache.includes(item)) _this4.load(item, index);
+      // Loop through all the selectors and observe the relevant elements
+      this.selectors.forEach(function (selector) {
+        // Find all the elements
+        var elements = document.querySelectorAll(selector); // Observe the elements
+
+        for (var index = 0; index < elements.length; index++) {
+          if (_this2.loaded.indexOf(elements[index]) === -1) {
+            _this2.intersectionObserver.observe(elements[index]);
+          }
+        }
       });
-      this.observe();
+    }
+  }, {
+    key: "load",
+    value: function load(element) {
+      var image = new Image(); // When the image has loaded, we will add a class to the element
+
+      image.addEventListener('load', function () {
+        element.classList.add('lazy-loaded');
+        element.parentNode.classList.add('lazy-loaded--holder');
+      }); // Load the image
+
+      image.src = element.getAttribute('data-src'); // Set up the image src / background image appropriately
+
+      element.tagName === 'IMG' ? element.src = image.src : element.style.backgroundImage = "url(".concat(image.src, ")");
     }
   }]);
 
-  return Lazy;
+  return LazyLoad;
 }();
 
-export { Lazy as default };
+export { LazyLoad as default };
