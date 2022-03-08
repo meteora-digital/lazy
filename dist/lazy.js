@@ -88,6 +88,10 @@ var LazyLoad = /*#__PURE__*/function () {
       image.addEventListener('load', function () {
         element.classList.add('lazy-loaded');
         element.parentNode.classList.add('lazy-loaded--holder');
+      }); // If the image fails to load
+
+      image.addEventListener('error', function () {
+        element.classList.add('lazy-error');
       }); // Load the image
 
       image.src = element.getAttribute('data-src'); // Set up the image src / background image appropriately

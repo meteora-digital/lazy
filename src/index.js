@@ -66,6 +66,12 @@ export default class LazyLoad {
       element.classList.add('lazy-loaded');
       element.parentNode.classList.add('lazy-loaded--holder');
     });
+
+    // If the image fails to load
+    image.addEventListener('error', () => {
+      element.classList.add('lazy-error');
+    });
+
     // Load the image
     image.src = element.getAttribute('data-src');
     // Set up the image src / background image appropriately
