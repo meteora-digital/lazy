@@ -29,8 +29,7 @@ export default class LazyLoad {
         }
       });
     }, {
-      threshold: 1,
-      rootMargin: `0px 0px ${this.settings.offset}px 0px`,
+      rootMargin: `${this.settings.offset}px`,
     });
   }
 

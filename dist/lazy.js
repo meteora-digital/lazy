@@ -42,8 +42,7 @@ var LazyLoad = /*#__PURE__*/function () {
         }
       });
     }, {
-      threshold: 1,
-      rootMargin: "0px 0px ".concat(this.settings.offset, "px 0px")
+      rootMargin: "".concat(this.settings.offset, "px")
     });
   }
 
