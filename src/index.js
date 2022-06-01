@@ -27,10 +27,10 @@ export default class LazyLoad {
           // Add the element to the loaded array
           this.loaded.push(entry.target);
         }
-      }, {
-        threshold: 1,
-        rootMargin: `0 0 ${this.settings.offset}px 0`,
       });
+    }, {
+      threshold: 1,
+      rootMargin: `0px 0px ${this.settings.offset}px 0px`,
     });
   }
 

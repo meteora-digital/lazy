@@ -40,10 +40,10 @@ var LazyLoad = /*#__PURE__*/function () {
 
           _this.loaded.push(entry.target);
         }
-      }, {
-        threshold: 1,
-        rootMargin: "0 0 ".concat(_this.settings.offset, "px 0")
       });
+    }, {
+      threshold: 1,
+      rootMargin: "0px 0px ".concat(this.settings.offset, "px 0px")
     });
   }
 
