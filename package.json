@@ -1,6 +1,6 @@
 {
   "name": "@meteora-digital/lazy",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "es6 class to lazy load images",
   "author": "Emmanuel Davies",
   "license": "MIT",
