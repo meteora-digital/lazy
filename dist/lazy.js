@@ -95,7 +95,7 @@ var LazyLoad = /*#__PURE__*/function () {
 
       image.src = element.getAttribute('data-src'); // Set up the image src / background image appropriately
 
-      element.tagName === 'IMG' ? element.src = image.src : element.style.backgroundImage = "url(".concat(image.src, ")");
+      element.tagName === 'IMG' || element.tagName === 'VIDEO' ? element.src = image.src : element.style.backgroundImage = "url(".concat(image.src, ")");
     }
   }]);
 
