@@ -1,9 +1,13 @@
-export default class LazyLoad {
+export default class LazyLoadController {
   constructor(options = {}) {
+    // The items being watched
+    this.items = [];
     // The selector we will use to find lazy elements
     this.selectors = [];
     // The images that have already been loaded
     this.loaded = [];
+    // Some throttles / timeouts
+    this.timeouts = {};
     // The default settings
     this.settings = {
       offset: 500,
@@ -17,19 +21,28 @@ export default class LazyLoad {
     }
 
     // Set up a new intersection observer
-    this.intersectionObserver = new IntersectionObserver((entries) => {
+    this.IntersectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           // Tell the page to load this image
           this.load(entry.target);
           // Stop observing the element
-          this.intersectionObserver.unobserve(entry.target);
+          this.IntersectionObserver.unobserve(entry.target);
           // Add the element to the loaded array
           this.loaded.push(entry.target);
         }
       });
     }, {
       rootMargin: `${this.settings.offset}px`,
+    });
+
+    // Set up a mutation observer to watch for new elements
+    this.MutationObserver = new MutationObserver(() => this.update());
+
+    // Observe the entire document
+    this.MutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
     });
   }
 
@@ -45,17 +58,38 @@ export default class LazyLoad {
   }
 
   update() {
-    // Loop through all the selectors and observe the relevant elements
-    this.selectors.forEach((selector) => {
-      // Find all the elements
-      const elements = document.querySelectorAll(selector);
-      // Observe the elements
-      for (let index = 0; index < elements.length; index++) {
-        if (this.loaded.indexOf(elements[index]) === -1) {
-          this.intersectionObserver.observe(elements[index]);
-        }
-      }
-    });
+    // Clear the update timeout
+    clearTimeout(this.timeouts['update']);
+
+    // Set the update timeout
+    this.timeouts['update'] = setTimeout(() => {
+      // Loop through all the items, and check if they are still on the page
+      this.items.forEach((item) => {
+        // If the item is still on the page, continue
+        if (document.body.contains(item)) return;
+        // Remove the item from the list of items
+        this.items.splice(this.items.indexOf(item), 1);
+        // Remove the item from the list of loaded items
+        this.loaded.splice(this.loaded.indexOf(item), 1);
+        // Unobserve the item
+        this.IntersectionObserver.unobserve(item);
+      });
+
+      // Loop through the selectors
+      this.selectors.forEach((selector) => {
+        // Loop through all the elements on the page that match the selector
+        [...document.querySelectorAll(selector)].forEach((element) => {
+          // If this element is already being watched, return
+          if (this.items.includes(element)) return;
+          // If the element has already been loaded, return
+          if (this.loaded.includes(element)) return;
+          // Add the element to the intersection observer
+          this.IntersectionObserver.observe(element);
+          // Add the element to the list of items
+          this.items.push(element);
+        });
+      });
+    }, 100);
   }
 
   load(element) {
